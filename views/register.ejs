@@ -6,20 +6,22 @@
     <title>TodoList</title>
     <%- include('link/head.ejs') %>
   </head>
-  <body>
-    <h1 class="text-3xl">LogoIn</h1>
-    <form action="" class="flex flex-col gap-2">
-      <div>
+  <body
+    class="max-w-3xl min-h-screen flex flex-col items-center justify-center mx-auto"
+  >
+    <h1 class="text-7xl text-center font-bold py-8">Register</h1>
+    <form action="" class="flex flex-col gap-4">
+      <div class="text-xl">
         <label for="">姓名</label>
         <input type="text" name="name" id="" class="border rounded-sm" />
       </div>
-      <div>
+      <div class="text-xl">
         <label for="">帳號</label>
-        <input type="text" name="email" id="" />
+        <input type="text" name="email" id="" class="border rounded-sm" />
       </div>
-      <div>
+      <div class="text-xl">
         <label for="">密碼</label>
-        <input type="text" name="password" id="" />
+        <input type="text" name="password" id="" class="border rounded-sm" />
       </div>
     </form>
   </body>
