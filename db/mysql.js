@@ -1,6 +1,6 @@
-const mysql = require("mysql2/promise");
+const mysql = require("mysql2");
 const CreateUserDB = require("./user");
-const pool = mysql.createPool({
+const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "root",
@@ -10,18 +10,12 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
-async function testConnection() {
-  try {
-    const connection = await pool.getConnection();
-    await connection.query(CreateUserDB());
-
+connection.connect((err) => {
+  if (!err) {
+    connection.query(CreateUserDB());
     console.log("✅ DB數據連接");
     connection.release();
-  } catch (err) {
-    console.error("Database connection failed:", err);
   }
-}
+});
 
-testConnection();
-
-module.exports = pool; // 导出连接池，供其他模块使用
+module.exports = connection; // 导出连接池，供其他模块使用

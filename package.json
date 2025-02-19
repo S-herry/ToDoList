@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
@@ -16,6 +19,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.12.0",
     "nodemon": "^3.1.9",
-    "req-flash": "^0.0.3"
+    "req-flash": "^0.0.3",
+    "sequelize": "^6.37.5"
   }
 }
