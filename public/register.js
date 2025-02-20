@@ -1,16 +1,18 @@
 $("#register").on("submit", (event) => {
   event.preventDefault();
   let data = $("#register").serialize(); //  URL 編碼數據
+
   $.ajax({
     type: "POST",
     url: "/user/register",
     data: data,
     dataType: "JSON",
     success: function (response) {
-      console.log("註冊成功", response);
+      $("#errorMessage").text("");
+      window.location.href = "http://localhost:3000/";
     },
     error: function (err) {
-      console.log("註冊失敗", err);
+      $("#errorMessage").text(err.responseJSON.message);
     },
   });
 });

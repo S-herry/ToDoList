@@ -12,9 +12,15 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
   if (!err) {
-    connection.query(CreateUserDB());
     console.log("✅ DB數據連接");
-    connection.release();
+
+    connection.query(CreateUserDB(), (UseDBerr, results) => {
+      if (UseDBerr) {
+        console.error("❌ 表创建失败:", UseDBerr);
+      } else {
+        console.log("✅ `user` 表已创建或已存在");
+      }
+    });
   }
 });
 
