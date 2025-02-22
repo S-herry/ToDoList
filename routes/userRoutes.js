@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const db = require("../db/mysql");
 const jwt = require("jsonwebtoken");
+const SECRET = "TO_DO_LIST"; // 簽發 JWT 時使用的密鑰
 
 router.get("/register", (req, res) => {
   res.render("register");
@@ -59,6 +60,7 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+
   if (!email || email.length < 8) {
     return res.status(400).json({ message: "email太短，至少 8 個字元" });
   }
@@ -85,8 +87,8 @@ router.post("/login", async (req, res) => {
             name,
             email,
           },
-          "secret",
-          { expiresIn: 60 }
+          SECRET,
+          { expiresIn: "10m" }
         );
 
         return res.status(200).json({ message: "成功", token: token });
@@ -98,5 +100,9 @@ router.post("/login", async (req, res) => {
     console.error("❌ 登入錯誤:", err);
     return res.status(500).json({ message: "伺服器錯誤" });
   }
+});
+
+router.get("/signout", (req, res) => {
+  res.status(200).json({ message: "登出成功" });
 });
 module.exports = router;

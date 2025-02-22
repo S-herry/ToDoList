@@ -4,9 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TodoList</title>
+
     <%- include('link/head.ejs') %>
   </head>
-  <body class="max-w-3xl min-h-screen flex flex-col items-center mx-auto">
+  <body
+    class="max-w-3xl min-h-screen flex flex-col items-center mx-auto relative"
+  >
     <%- include('partials/header.ejs') %>
 
     <main class="py-8 w-full">
@@ -16,5 +19,34 @@
 
     <%- include('link/script.ejs') %>
     <script src="/index.js"></script>
+    <script>
+      function fetchData() {
+        const token = localStorage.getItem("token");
+        $.ajax({
+          url: "/verify-token",
+          type: "GET",
+          headers: {
+            Authorization: token,
+          },
+          success: function (response) {
+            $("#userName").html(response.user.name);
+          },
+          error: function (xhr) {
+            Swal.fire({
+              html: "將跳轉至登入頁面",
+              draggable: true,
+              timer: 2000,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+              willClose: () => {
+                window.location.href = "/user/login";
+              },
+            });
+          },
+        });
+      }
+      fetchData();
+    </script>
   </body>
 </html>

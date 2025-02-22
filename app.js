@@ -1,10 +1,10 @@
 const ejs = require("ejs");
 const db = require("./db/mysql");
-const jwt = require("jsonwebtoken");
 
 const userRoutes = require("./routes/userRoutes"); // 路由
 const express = require("express");
 const path = require("path");
+const verifyJWT = require("./routes/verifyJWT");
 
 const app = express();
 
@@ -15,13 +15,17 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 
+// app.use(verifyJWT({ tokenPath: "headers.authorization" }));
+app.get("/verify-token", verifyJWT(), (req, res) => {
+  res.json({ message: "Token 有效", user: req.user });
+});
+
 app.get("/", (req, res) => {
-  const token = req.headers.authorization;
-  if (!token) {
-    return res.status(401).json({ message: "未提供 Token" });
+  try {
+    res.render("index");
+  } catch (err) {
+    return res.status(403).json({ message: "Token 无效" });
   }
-  const decoded = jwt.verify(token, "secret");
-  res.render("index");
 });
 
 app.use("/user", userRoutes);

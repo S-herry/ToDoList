@@ -24,7 +24,16 @@
           required
         />
       </div>
-      <button type="submit" class="border rounded-sm">登入</button>
+      <button type="submit" class="border rounded-sm cursor-pointer">
+        登入
+      </button>
+      <button
+        id="toRegister"
+        type="button"
+        class="border rounded-sm cursor-pointer"
+      >
+        註冊
+      </button>
       <span
         class="text-center bg-red-500 text-white rounded-sm"
         id="errorMessage"
@@ -32,6 +41,21 @@
     </form>
 
     <%- include('link/script.ejs') %>
-    <script src="/login.js"></script>
+    <script>
+      function fetchData() {
+        const token = localStorage.getItem("token");
+        $.ajax({
+          url: "/verify-token",
+          type: "GET",
+          headers: {
+            Authorization: token,
+          },
+          success: function (response) {
+            window.location.href = "/";
+          },
+        });
+      }
+      fetchData();
+    </script>
   </body>
 </html>
