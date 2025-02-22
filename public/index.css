@@ -4,3 +4,21 @@ h1 {
   font-weight: 400;
   font-style: normal;
 }
+
+/* .event::before {
+  box-sizing: border-box;
+  content: attr(data-content);
+  border: 2px solid black;
+  padding: 10px;
+  display: inline-block;
+  margin-right: 5px;
+} */
+.checkbox-fixed {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+.del-btn {
+  width: 40px;
+  height: 40px;
+}

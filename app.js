@@ -1,7 +1,7 @@
 const ejs = require("ejs");
 const db = require("./db/mysql");
-
 const userRoutes = require("./routes/userRoutes"); // 路由
+const eventRoutes = require("./routes/eventRoutes"); // 路由
 const express = require("express");
 const path = require("path");
 const verifyJWT = require("./routes/verifyJWT");
@@ -29,6 +29,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRoutes);
+app.use("/events", eventRoutes);
 
 let server = app.listen(3000, function () {
   let port = server.address().port;

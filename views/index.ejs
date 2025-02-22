@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TodoList</title>
-
+    <!-- <title>TodoList</title> -->
+    <title>Todo list</title>
     <%- include('link/head.ejs') %>
   </head>
   <body
@@ -14,11 +14,12 @@
 
     <main class="py-8 w-full">
       <%- include('partials/section.ejs') %>
-      <section><%- include('partials/events.ejs') %></section>
+      <section class="flex justify-center mt-10">
+        <%- include('partials/events') %>
+      </section>
     </main>
 
     <%- include('link/script.ejs') %>
-    <script src="/index.js"></script>
     <script>
       function fetchData() {
         const token = localStorage.getItem("token");
@@ -32,6 +33,7 @@
             $("#userName").html(response.user.name);
           },
           error: function (xhr) {
+            localStorage.removeItem("token");
             Swal.fire({
               html: "將跳轉至登入頁面",
               draggable: true,
@@ -45,7 +47,19 @@
             });
           },
         });
+
+        $.ajax({
+          type: "GET",
+          headers: {
+            Authorization: token, // 添加 Authorization 头部
+          },
+          url: "/events?status=all", // 查询所有状态的事件
+          success: (event) => {
+            loadEvents(event.events, token);
+          },
+        });
       }
+
       fetchData();
     </script>
   </body>

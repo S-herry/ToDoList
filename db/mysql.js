@@ -1,5 +1,7 @@
 const mysql = require("mysql2");
 const CreateUserDB = require("./user");
+const CreateEventsDB = require("./events");
+
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -16,9 +18,16 @@ connection.connect((err) => {
 
     connection.query(CreateUserDB(), (UseDBerr, results) => {
       if (UseDBerr) {
-        console.error("❌ 表创建失败:", UseDBerr);
+        console.error("❌ 表單創建失敗:", UseDBerr);
       } else {
-        console.log("✅ `user` 表已创建或已存在");
+        console.log("✅ `user` 已創建");
+      }
+    });
+    connection.query(CreateEventsDB(), (EventDBerr, results) => {
+      if (EventDBerr) {
+        console.error("❌  表單創建失敗:", EventDBerr);
+      } else {
+        console.log("✅ `events`已創建");
       }
     });
   }
