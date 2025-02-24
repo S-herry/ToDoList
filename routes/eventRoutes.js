@@ -72,4 +72,16 @@ router.delete("/:eventId", (req, res) => {
   });
 });
 
+router.put("/", (req, res) => {
+  const user_id = req.user.id;
+  const { eventid, eventStatus } = req.body;
+  const putQuery = `UPDATE events SET status = ? WHERE user_id = ? AND id = ?`;
+  db.query(putQuery, [eventStatus, user_id, eventid], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "資料錯誤 error" });
+    }
+    res.json({ message: "成功更新", event: result });
+  });
+});
+
 module.exports = router;

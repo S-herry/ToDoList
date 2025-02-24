@@ -51,11 +51,11 @@
         $.ajax({
           type: "GET",
           headers: {
-            Authorization: token, // 添加 Authorization 头部
+            Authorization: token,
           },
-          url: "/events?status=all", // 查询所有状态的事件
+          url: "/events?status=all",
           success: (event) => {
-            loadEvents(event.events, token);
+            loadEvents(event.events, token, "all");
           },
         });
       }

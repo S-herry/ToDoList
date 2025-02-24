@@ -20,11 +20,13 @@ app.get("/verify-token", verifyJWT(), (req, res) => {
   res.json({ message: "Token 有效", user: req.user });
 });
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   try {
     res.render("index");
   } catch (err) {
-    return res.status(403).json({ message: "Token 无效" });
+    return res
+      .status(500)
+      .json({ message: "获取事件失败", error: err.message });
   }
 });
 
