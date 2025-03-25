@@ -53,14 +53,85 @@ $("#signout").click(() => {
     url: "/user/signout",
     success: function (response) {
       localStorage.removeItem("token");
-      window.location.href = "/";
+      window.location.reload();
     },
   });
 });
 $("#toRegister").click(() => {
   window.location.href = "/user/register";
 });
-$("#addEvent").click(() => {
+$("#toLogin").click(() => {
+  window.location.href = "/user/login";
+});
+// 修改狀態
+function bindStatusChangeEvent(element, eventId) {
+  element.find("input").on("change", function () {
+    const checked = this.checked;
+    const token = localStorage.getItem("token");
+    $.ajax({
+      type: "PUT",
+      url: "/events",
+      headers: {
+        Authorization: token,
+      },
+      data: {
+        eventStatus: checked ? "已完成" : "未完成",
+        eventid: eventId,
+      },
+      success: () => {
+        element.find("label").toggleClass("line-through", checked);
+        const ul = element.closest("ul");
+        const ul_id = ul[0].id;
+        if (ul_id != "all-events") element.remove();
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  });
+}
+// 刪除事件
+function bindDeleteEvent(element, eventId) {
+  const token = localStorage.getItem("token");
+
+  element.find(".del-btn").on("click", function () {
+    $.ajax({
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      type: "DELETE",
+      url: `/events/${eventId}`,
+      success: () => {
+        element.remove();
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  });
+}
+// 取得事件
+function getCurrentState(newState) {
+  const token = localStorage.getItem("token");
+  const state = newState == 0 ? "未完成" : newState == 1 ? "已完成" : "all";
+
+  $.ajax({
+    type: "GET",
+    url: `/events?status=${state}`,
+    headers: {
+      Authorization: token,
+    },
+    success: (event) => {
+      loadEvents(event.events, state);
+    },
+    error: () => {
+      window.location.reload();
+    },
+  });
+}
+// 新增事件
+function addNewEvent() {
   const event_content = $("#event_content").val();
   const status = "未完成";
   const token = localStorage.getItem("token");
@@ -91,131 +162,45 @@ $("#addEvent").click(() => {
         title: "新增成功",
       });
 
-      const eventId = response.event?.id || response.id; // 确保获取正确的 ID
-      const newEvent = $(`
-        <li class="event border rounded-md p-4 flex">
-          <input type="checkbox" class="basis-1/6 checkbox-fixed my-auto" id="event-${eventId}" />
-          <label for="event-${eventId}" class="basis-4/6 my-auto">
-            ${response.event?.event_content || event_content}
-          </label>
-          <div class="basis-1/6 my-auto text-center">
-            <button class="ml-2 del-btn cursor-pointer text-white bg-red-500 hover:bg-red-700 font-bold rounded-md">
-              X
-            </button>
-          </div>
-        </li>
-      `);
+      const eventId = response.event?.id || response.id;
+      const newEvent = li(response.event);
 
       $("#unfinished-list").prepend(newEvent);
       const clonedEvent = newEvent.clone();
       $("#all-events").prepend(clonedEvent);
 
-      // 处理删除事件
-      function bindDeleteEvent(element) {
-        element.find(".del-btn").on("click", function () {
-          $.ajax({
-            headers: {
-              Authorization: token,
-              "Content-Type": "application/json",
-            },
-            type: "DELETE",
-            url: `/events/${eventId}`,
-            success: () => {
-              element.remove();
-            },
-            error: (err) => {
-              console.log(err);
-            },
-          });
-        });
-      }
-
-      // 处理完成状态切换
-      function bindStatusChangeEvent(element) {
-        element.find("input").on("change", function () {
-          const checked = this.checked;
-          $.ajax({
-            type: "PUT",
-            url: "/events",
-            headers: {
-              Authorization: token,
-            },
-            data: {
-              eventStatus: checked ? "已完成" : "未完成",
-              eventid: eventId,
-            },
-            success: () => {
-              element.find("label").toggleClass("line-through", checked);
-            },
-            error: (err) => {
-              console.log(err);
-            },
-          });
-        });
-      }
-
       // 绑定事件
-      bindDeleteEvent(newEvent);
-      bindStatusChangeEvent(newEvent);
-      bindDeleteEvent(clonedEvent);
-      bindStatusChangeEvent(clonedEvent);
+      bindDeleteEvent(newEvent, eventId);
+      bindStatusChangeEvent(newEvent, eventId);
+      bindDeleteEvent(clonedEvent, eventId);
+      bindStatusChangeEvent(clonedEvent, eventId);
     },
     error: (err) => {
-      console.log(err);
+      window.location.reload();
     },
   });
-});
+}
 
-$("#allEvents").click(() => {
-  const token = localStorage.getItem("token");
+$("#addEvent").click(() => addNewEvent());
+$("#allEvents").click(() => getCurrentState(2));
+$("#waitEvents").click(() => getCurrentState(0));
+$("#finishEvents").click(() => getCurrentState(1));
 
-  $.ajax({
-    type: "GET",
-    headers: {
-      Authorization: token,
-    },
-    url: "/events?status=all",
-    success: (event) => {
-      loadEvents(event.events, token, "all");
-    },
-  });
-});
-$("#waitEvents").click(() => {
-  const token = localStorage.getItem("token");
+function li(event) {
+  return $(`
+    <li class="event border rounded-md p-4 flex">
+      <input type="checkbox" class="basis-1/6 checkbox-fixed my-auto" id="event${event.id}" />
+      <label for="event${event.id}" class="basis-4/6 my-auto">${event.event_content}</label>
+      <div class="basis-1/6 my-auto text-center">
+        <button class="ml-2 del-btn cursor-pointer text-white hover:bg-red-100 font-bold rounded-md">
+          <img src="/delEventIcon.png"  />
+        </button>
+      </div>
+    </li>
+  `);
+}
 
-  $.ajax({
-    type: "GET",
-    url: "/events?status=未完成", // 查询未完成的事件
-    headers: {
-      Authorization: token,
-    },
-    success: (event) => {
-      loadEvents(event.events, token, "未完成");
-    },
-    error: (response) => {
-      window.location.href = "/";
-    },
-  });
-});
-$("#finishEvents").click(() => {
-  const token = localStorage.getItem("token");
-
-  $.ajax({
-    type: "GET",
-    url: "/events?status=已完成",
-    headers: {
-      Authorization: token,
-    },
-    success: (event) => {
-      loadEvents(event.events, token, "已完成");
-    },
-    error: (response) => {
-      window.location.href = "/";
-    },
-  });
-});
-
-function loadEvents(events, token, get) {
+function loadEvents(events, get) {
   $("#all-events, #unfinished-list, #finished-list").addClass("hidden");
 
   let eventList = $("#all-events");
@@ -228,81 +213,22 @@ function loadEvents(events, token, get) {
 
   events.forEach((event) => {
     if (!event || typeof event !== "object") {
-      console.error("event  數據無效:", event);
+      console.error("event 數據無效:", event);
       return;
     }
+    const liElement = li(event);
 
-    const li = $(`
-      <li class="event border rounded-md p-4 flex">
-          <input type="checkbox" class="basis-1/6 checkbox-fixed my-auto"  id="event${event.id}" />
-        <label for="event${event.id}" class="basis-4/6 my-auto" >
-          ${event.event_content}</label> 
-          <div class="basis-1/6 my-auto text-center  ">
-        <button class="ml-2 del-btn cursor-pointer text-white bg-red-500 hover:bg-red-700 font-bold  rounded-md">
-          X
-        </button>
-        </div>
-      </li>
-    `);
     if (event.status === "已完成") {
-      li.find("label").addClass("line-through");
-      li.find("input").prop("checked", true);
+      liElement.find("label").addClass("line-through");
+      liElement.find("input").prop("checked", true);
     } else {
-      li.find("input").prop("checked", false);
+      liElement.find("input").prop("checked", false);
     }
 
-    eventList.append(li);
-    li.find("input").on("change", function () {
-      if (this.checked) {
-        $.ajax({
-          type: "PUT",
-          url: "/events",
-          headers: {
-            Authorization: token,
-          },
-          data: {
-            eventStatus: "已完成",
-            eventid: event.id,
-          },
-          success: function (response) {
-            li.find("label").addClass(" line-through ");
-            if (get !== "all") li.remove();
-          },
-        });
-      } else {
-        $.ajax({
-          type: "PUT",
-          url: "/events",
-          headers: {
-            Authorization: token,
-          },
-          data: {
-            eventStatus: "未完成",
-            eventid: event.id,
-          },
-          success: function (response) {
-            li.find("label").removeClass(" line-through ");
-            if (get !== "all") li.remove();
-          },
-        });
-      }
-    });
-    li.find(".del-btn").on("click", function () {
-      $.ajax({
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-        type: "DELETE",
-        url: `/events/${event.id}`,
-        success: () => {
-          li.remove();
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-    });
+    bindStatusChangeEvent(liElement, event.id);
+    bindDeleteEvent(liElement, event.id);
+
+    eventList.append(liElement);
   });
 }
 

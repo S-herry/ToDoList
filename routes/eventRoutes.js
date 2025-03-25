@@ -48,6 +48,7 @@ router.get("/", (req, res) => {
         return res.status(500).json({ message: "查询失败", error: err });
       }
       res.json({ events: results });
+      // res.render("index", { events: results || [] }); // 确保 events 至少是一个空数组
     }
   );
 });

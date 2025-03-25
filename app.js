@@ -24,9 +24,7 @@ app.get("/", async (req, res) => {
   try {
     res.render("index");
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "获取事件失败", error: err.message });
+    return res.status(500).json({ message: "伺服器錯誤", error: err.message });
   }
 });
 

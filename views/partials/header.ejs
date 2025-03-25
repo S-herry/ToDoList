@@ -1,7 +1,17 @@
 <%- include('nav.ejs') %>
 <header class="text-center">
-  <h1 class="text-7xl text-center font-bold py-8">TODO LIST</h1>
-  <div class="border rounded-sm flex">
+  <img
+    src="/title.png"
+    alt=""
+    class="absolute w-4/5 object-contain left-10 lg:top-5 md:top-10 -z-10"
+  />
+  <div class="relative">
+    <div class="py-8">
+      <h1 class="relative text-7xl text-center font-bold">TODO LIST</h1>
+    </div>
+  </div>
+
+  <div class="border rounded-sm flex mt-4">
     <input
       id="event_content"
       class="w-full p-3 border border-none rounded-lg focus:outline-none focus:none"
@@ -10,21 +20,7 @@
     />
 
     <button id="addEvent" class="text-center pe-2 cursor-pointer">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="2"
-        stroke="currentColor"
-        class="size-8 p-1 text-gray-300 bg-black rounded-sm"
-      >
-        >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 4.5v15m7.5-7.5h-15"
-        />
-      </svg>
+      <img src="/addEventIcon.png" alt="" class="w-10 h-8" />
     </button>
   </div>
 </header>

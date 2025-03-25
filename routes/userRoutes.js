@@ -52,10 +52,6 @@ router.post("/register", async (req, res) => {
     console.error("❌ 註冊錯誤:", error);
     return res.status(500).json({ message: "伺服器錯誤" });
   }
-
-  res.json(200, {
-    message: "註冊成功",
-  });
 });
 
 router.post("/login", async (req, res) => {

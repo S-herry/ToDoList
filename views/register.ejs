@@ -9,34 +9,70 @@
   <body
     class="max-w-3xl min-h-screen flex flex-col items-center justify-center mx-auto"
   >
-    <h1 class="text-7xl text-center font-bold py-8">Register</h1>
-    <form id="register" class="flex flex-col gap-4">
-      <div class="text-xl">
-        <label for="name">姓名</label>
-        <input type="text" name="name" class="border rounded-sm" required />
-      </div>
-      <div class="text-xl">
-        <label for="email">帳號</label>
-        <input type="email" name="email" class="border rounded-sm" required />
-      </div>
-      <div class="text-xl">
-        <label for="password">密碼</label>
+    <div class="relative w-4/5 mb-7">
+      <img src="/title.png" alt="" class="w-full object-contain" />
+      <h1
+        class="absolute mt-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-7xl text-center font-bold"
+      >
+        註冊
+      </h1>
+    </div>
+    <form
+      id="register"
+      class="flex flex-col gap-4 items-center w-4/6 bg-white/60 border border-gray-500 py-10 rounded-lg"
+    >
+      <div class="flex border rounded-sm w-3/5">
+        <span class="inline-flex items-center px-3 text-xl"> 姓名 </span>
         <input
-          type="password"
-          name="password"
-          class="border rounded-sm"
+          type="text"
+          name="name"
+          id="website-admin"
+          class="rounded-none focus:outline-none focus:ring-0 focus:border-transparent rounded-e-lg text-gray-900 block flex-1 min-w-0 w-full p-2.5"
           required
         />
       </div>
-      <button type="submit" class="border rounded-sm cursor-pointer">
+      <div class="flex border rounded-sm w-3/5">
+        <span class="inline-flex items-center px-3 text-xl"> 帳號 </span>
+        <input
+          type="email"
+          name="email"
+          id="website-admin"
+          class="rounded-none focus:outline-none focus:ring-0 focus:border-transparent rounded-e-lg text-gray-900 block flex-1 min-w-0 w-full p-2.5"
+          required
+        />
+      </div>
+      <div class="flex border rounded-sm w-3/5">
+        <span class="inline-flex items-center px-3 text-xl"> 密碼 </span>
+        <input
+          type="password"
+          name="password"
+          id="website-admin"
+          class="rounded-none focus:outline-none focus:ring-0 focus:border-transparent rounded-e-lg text-gray-900 block flex-1 min-w-0 w-full p-2.5"
+          required
+        />
+      </div>
+      <button type="submit" class="border rounded-sm cursor-pointer w-1/5">
         註冊
       </button>
+
+      <button
+        type="button"
+        id="toLogin"
+        class="border rounded-sm cursor-pointer w-1/5"
+      >
+        登入
+      </button>
+
       <span
         class="text-center bg-red-500 text-white rounded-sm"
         id="errorMessage"
       ></span>
     </form>
-
+    <img
+      src="/油漆桶.png"
+      class="absolute bottom-0 left-0 w-32 md:w-40 lg:w-48 -z-20"
+      alt=""
+    />
     <%- include('link/script.ejs') %>
   </body>
 </html>

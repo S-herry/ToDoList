@@ -3,22 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <title>TodoList</title> -->
     <title>Todo list</title>
     <%- include('link/head.ejs') %>
   </head>
-  <body
-    class="max-w-3xl min-h-screen flex flex-col items-center mx-auto relative"
-  >
-    <%- include('partials/header.ejs') %>
+  <body class="relative min-h-screen">
+    <div class="max-w-4xl flex flex-col items-center mx-auto relative mb-5">
+      <%- include('partials/header.ejs') %>
 
-    <main class="py-8 w-full">
-      <%- include('partials/section.ejs') %>
-      <section class="flex justify-center mt-10">
-        <%- include('partials/events') %>
-      </section>
-    </main>
-
+      <main class="py-8 w-full">
+        <%- include('partials/section.ejs') %>
+        <section class="flex justify-center mt-10">
+          <%- include('partials/events') %>
+        </section>
+      </main>
+    </div>
+    <img
+      src="/油漆桶.png"
+      class="absolute bottom-0 left-0 w-32 md:w-40 lg:w-48 -z-20"
+      alt=""
+    />
     <%- include('link/script.ejs') %>
     <script>
       function fetchData() {

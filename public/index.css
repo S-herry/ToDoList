@@ -25,3 +25,8 @@ h1 {
 .del-btn:focus {
   outline: 2px solid white; /* 增加可访问性 */
 }
+body {
+  background-image: url("/bg2.png");
+  background-size: cover; /* 确保两张图都等比例缩放 */
+  background-repeat: no-repeat;
+}
